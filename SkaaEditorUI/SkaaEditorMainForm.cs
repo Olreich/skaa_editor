@@ -121,7 +121,7 @@ namespace SkaaEditorUI
         /// This may be called any time to reset menu items and ensure event subscriptions 
         /// are done. EventHandlers already ensure they are not hooked multiple times.
         /// </remarks>
-        private void SetupUI()
+        private void SetupUI(bool update = false)
         {
             //todo: Allow for changing the palette. Will have to rebuild color chooser and all sprites
 
@@ -146,18 +146,21 @@ namespace SkaaEditorUI
             this.showGridToolStripMenuItem.Checked = this.imageEditorBox.ShowPixelGrid;
 
             //event subscriptions
-            this.ActiveProjectChanged += SkaaEditorMainForm_ActiveProjectChanged;
-            if (this.ActiveProject != null)
+            if (!update)
             {
-                this.ActiveProject.ActiveSpriteChanged += ActiveProject_ActiveSpriteChanged;
-                this.ActiveProject.ActiveFrameChanged += ActiveProject_ActiveFrameChanged;
-                this.ActiveProject.PaletteChanged += ActiveProject_PaletteChanged;
+                this.ActiveProjectChanged += SkaaEditorMainForm_ActiveProjectChanged;
+                if (this.ActiveProject != null)
+                {
+                    this.ActiveProject.ActiveSpriteChanged += ActiveProject_ActiveSpriteChanged;
+                    this.ActiveProject.ActiveFrameChanged += ActiveProject_ActiveFrameChanged;
+                    this.ActiveProject.PaletteChanged += ActiveProject_PaletteChanged;
+                }
+                this.skaaColorChooser.ActiveColorChanged += skaaColorChooser_ActiveColorChanged;
+                this.timelineControl.ActiveFrameChanged += timelineControl_ActiveFrameChanged;
+                this.timelineControl.ActiveSpriteChanged += TimelineControl_ActiveSpriteChanged;
+                this.imageEditorBox.ImageChanged += imageEditorBox_ImageChanged;
+                this.imageEditorBox.ImageUpdated += imageEditorBox_ImageUpdated;
             }
-            this.skaaColorChooser.ActiveColorChanged += skaaColorChooser_ActiveColorChanged;
-            this.timelineControl.ActiveFrameChanged += timelineControl_ActiveFrameChanged;
-            this.timelineControl.ActiveSpriteChanged += TimelineControl_ActiveSpriteChanged;
-            this.imageEditorBox.ImageChanged += imageEditorBox_ImageChanged;
-            this.imageEditorBox.ImageUpdated += imageEditorBox_ImageUpdated;
         }
         private void NewProject(bool loadDefaults = false)
         {
@@ -484,7 +487,7 @@ namespace SkaaEditorUI
             else
             {
                 this.imageEditorBox.Image = this.ActiveProject.ActiveFrame.ImageBmp;
-                this.timelineControl.ActiveFrame = this.ActiveProject.ActiveFrame;
+                //this.timelineControl.ActiveFrame = this.ActiveProject.ActiveFrame;
             }
         }
         #endregion
@@ -568,7 +571,7 @@ namespace SkaaEditorUI
 
         private void imageEditorBox_ImageChanged(object sender, EventArgs e)
         {
-            SetupUI();
+            SetupUI(true);
         }
         private void imageEditorBox_ImageUpdated(object sender, EventArgs e)
         {
