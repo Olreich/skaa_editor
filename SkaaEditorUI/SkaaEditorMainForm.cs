@@ -188,7 +188,6 @@ namespace SkaaEditorUI
             if (this.ActiveProject != null && this.ActiveProject.ActiveSprite != null)
             {
                 this.cbMultiColumn.Enabled = true;
-                this.cbMultiColumn.DataSource = null;
                 this.cbMultiColumn.DataSource = this.ActiveProject.ActiveSprite.SpriteDataView;
                 this.cbMultiColumn.DisplayMember = "SPRITE";
                 this.cbMultiColumn.ValueMember = "ACTION";
